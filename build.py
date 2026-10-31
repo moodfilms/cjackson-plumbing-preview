@@ -214,7 +214,7 @@ def footer(active):
         <p>A family-owned plumbing firm in Castleford. Specialists in luxury bathrooms and kitchens, with 24-hour emergency call-outs.</p>
       </div>
       <div>
-        <h4>Get in touch</h4>
+        <p class="footer-h">Get in touch</p>
         <ul>
           <li><a href="tel:{LAND[1]}">Office {LAND[0]}</a></li>
           <li><a href="tel:{MOB[1]}">Mobile {MOB[0]}</a></li>
@@ -223,7 +223,7 @@ def footer(active):
         </ul>
       </div>
       <div>
-        <h4>Services</h4>
+        <p class="footer-h">Services</p>
         <ul>
           <li><a href="bathroom-fitters-castleford.html">Bathroom fitting</a></li>
           <li><a href="kitchen-fitters-castleford.html">Kitchen fitting</a></li>
@@ -232,7 +232,7 @@ def footer(active):
         </ul>
       </div>
       <div>
-        <h4>More</h4>
+        <p class="footer-h">More</p>
         <ul>
           <li><a href="work.html">Our work</a></li>
           <li><a href="areas.html">Areas we cover</a></li>
@@ -550,7 +550,7 @@ def work():
              'Before, during and after photos of bathrooms, en-suites and kitchens fitted by C Jackson Plumbing in Castleford, Pontefract and West Yorkshire.',
              'work.html', ld(business(), crumbs([('Our work', 'work.html')]), {"@type": "CollectionPage", "@id": SITE + "work.html#page", "name": "Our work", "url": SITE + "work.html", "about": {"@id": SITE + "#business"}}))
     h += header('work')
-    h += '''
+    h += f'''
 <main>
 <section class="page-head">
   <div class="wrap">

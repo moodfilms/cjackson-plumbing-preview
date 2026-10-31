@@ -53,6 +53,14 @@ REVIEWS = [
  dict(id='jonathan', name='Jonathan', place='Whitkirk', text="We were extremely impressed by the finish. We would highly recommend!"),
  dict(id='jason', name='Jason', place='Harrogate', text="Thoroughly happy with the job from start to finish."),
 ]
+# Google Business Profile: update these by hand when the rating changes.
+GOOGLE_RATING = '4.6'
+GOOGLE_COUNT = 29
+GOOGLE_URL = 'https://share.google/jorUrsgIrEd4Z9cPQ'
+REVIEWS = [
+ dict(id='germaine', name='Germaine F.', place='', source='google', text="We highly recommend Craig and his team. They carried out a fantastic job on replacing our bathroom floor. It was a (necessarily) complicated job and we had a row of plumbers and tilers scratch their chins at the possible size of the work. It did become complicated and we are very pleased with our choice to go with Craig Jackson. He is incredibly attentive to details and we are very happy by how thorough and pedantic he is, in the best way possible. Your trust will be very well placed in Craig and each of the people he chooses to bring with him. He is honest, hard working and a perfectionist with his work."),
+ dict(id='catherine', name='Catherine G.', place='', source='google', text="Craig is blooming brilliant, nothing is too much trouble. He has done my en-suite replacement and my boiler replacement and I couldn\u2019t be happier. His standards are high, his advice is great and he really wants the best outcome no matter what the budget, big or small. Totally trustworthy, and I\u2019ve often left him a key for work while I\u2019m out. I first called Craig for a leak, and now wouldn\u2019t go anywhere else."),
+] + REVIEWS
 RV = {r['id']: r for r in REVIEWS}
 
 PROJECTS = [
@@ -237,6 +245,7 @@ def footer(active):
           <li><a href="work.html">Our work</a></li>
           <li><a href="areas.html">Areas we cover</a></li>
           <li><a href="index.html#reviews">Reviews</a></li>
+          <li><a href="{GOOGLE_URL}" target="_blank" rel="noopener">Our Google reviews</a></li>
           <li><a href="index.html#faq">Questions</a></li>
           <li><a href="{pre}#contact">Request a quote</a></li>
         </ul>
@@ -274,9 +283,20 @@ def img(name, alt, cls='', lazy=True, w=None, h=None, sizes='(max-width: 640px) 
         srcset = f' srcset="img/{name}-640.jpg 640w, img/{name}.jpg {w}w" sizes="{sizes}"'
     return f'<img{c} src="img/{name}.jpg"{srcset} alt="{E(alt)}" width="{w}" height="{h}"{l}>'
 
+STAR = '<svg viewBox="0 0 20 20" aria-hidden="true"><path d="M10 1.5l2.6 5.6 6.1.7-4.5 4.2 1.2 6-5.4-3.1-5.4 3.1 1.2-6L1.3 7.8l6.1-.7z" fill="currentColor"/></svg>'
+
 def review_footer(r):
     place = f', {E(r["place"])}' if r['place'] else ''
-    return f'<b>{E(r["name"])}</b>{place}'
+    src = '<span class="review-src">Google review</span>' if r.get('source') == 'google' else ''
+    return f'<b>{E(r["name"])}</b>{place}{src}'
+
+def rating_badge(extra=''):
+    stars = ''.join(STAR for _ in range(5))
+    return f'''<a class="rating-badge{extra}" href="{GOOGLE_URL}" target="_blank" rel="noopener" aria-label="Rated {GOOGLE_RATING} out of 5 from {GOOGLE_COUNT} Google reviews. Opens Google.">
+        <span class="rating-g" aria-hidden="true">G</span>
+        <span class="rating-stars" style="--pct:{float(GOOGLE_RATING)/5*100:.0f}%" aria-hidden="true"><span class="rating-off">{stars}</span><span class="rating-on">{stars}</span></span>
+        <span class="rating-text"><b>{GOOGLE_RATING}</b> from {GOOGLE_COUNT} Google reviews</span>
+      </a>'''
 
 # ---------------- Homepage ----------------
 def home():
@@ -298,6 +318,7 @@ def home():
         <a class="btn btn--line" href="tel:{LAND[1]}">{ICON['phone']}Call {LAND[0]}</a>
       </div>
       <p class="hero-reassure">Home visit and written price before anything is booked. Small jobs welcome too.</p>
+      {rating_badge()}
       <figure class="hero-quote">
         {ICON['quote']}
         <blockquote style="margin:0"><p>He was on time (which is hard these days!). He organised electricians, tilers and plasterers. He was in touch with me all the time.</p>
@@ -443,17 +464,18 @@ def home():
     <div class="section-head">
       <span class="eyebrow">Reviews</span>
       <h2>What our customers say.</h2>
-      <p>Written by customers across Castleford, Pontefract, Leeds and beyond.</p>
+      <p>Rated {GOOGLE_RATING} out of 5 from {GOOGLE_COUNT} reviews on Google, by customers across Castleford, Pontefract, Leeds and beyond.</p>
+      <a class="text-link" href="{GOOGLE_URL}" target="_blank" rel="noopener">Read all our Google reviews {ICON['arrow']}</a>
     </div>
     <div class="reviews">
       <figure class="review-feature" style="margin:0">
         {ICON['quote']}
-        <blockquote style="margin:0"><p>{E(RV['pat']['text'])}</p></blockquote>
-        <footer>{review_footer(RV['pat'])}</footer>
+        <blockquote style="margin:0"><p>{E(RV['germaine']['text'])}</p></blockquote>
+        <footer>{review_footer(RV['germaine'])}</footer>
       </figure>
       <p class="swipe-hint" aria-hidden="true">Swipe for more reviews <span>&rarr;</span></p>
       <div class="review-grid">'''
-    for r in REVIEWS[1:]:
+    for r in [x for x in REVIEWS if x['id'] != 'germaine']:
         h += f'\n        <figure class="review"><blockquote style="margin:0"><p>{E(r["text"])}</p></blockquote><footer>{review_footer(r)}</footer></figure>'
     h += f'''
       </div>
@@ -789,7 +811,7 @@ SERVICES = [
       included=['Full strip-out and removal of the old suite', 'New pipework and first-fix plumbing', 'Electricians, plasterers and tilers organised for you',
                 'Baths, showers, basins, WCs and vanity units', 'Walk-in showers, wet rooms and built-in baths', 'Underfloor heating, towel radiators and LED mirrors'],
       featured='joanne', projects=['colin-michelle', 'dan', 'diane'], projects_h2='Bathrooms we&rsquo;ve fitted.',
-      reviews=['steve', 'richard', 'joanne'], faq=['cost', 'duration', 'trades', 'wetroom', 'areas', 'insured'],
+      reviews=['germaine', 'steve', 'richard'], faq=['cost', 'duration', 'trades', 'wetroom', 'areas', 'insured'],
       cta=('Ready to plan your new bathroom?', 'Tell us about the room and Craig will arrange a home visit at a time that suits you.')),
  dict(path='kitchen-fitters-castleford.html', key='kitchens', crumb='Kitchen fitting', stype='Kitchen installation',
       title='Kitchen Fitters in Castleford | C Jackson Plumbing',
@@ -819,7 +841,7 @@ SERVICES = [
       included=['Replacement taps and mixers', 'Leaking pipes and joints', 'Toilet and cistern repairs and replacements',
                 'Shower repairs and replacements', 'Radiators, towel rails and underfloor heating', 'Boiler, radiator and heating repairs'],
       featured=None, projects=['tina', 'dan', 'crashley'], projects_h2='Recent work.',
-      reviews=['paul', 'jonathan', 'meg'], faq=['small', 'heating', 'emergency', 'areas', 'insured', 'experience'],
+      reviews=['catherine', 'paul', 'jonathan'], faq=['small', 'heating', 'emergency', 'areas', 'insured', 'experience'],
       cta=('Need a plumber in Castleford?', 'Call the office, or send a few details and we’ll get back to you.')),
 ]
 
@@ -840,6 +862,7 @@ def service_page(d):
       <p>{E(d['intro'])}</p>
       {call_buttons()}
       <p class="hero-reassure">Home visit and written price before anything is booked. Fully insured.</p>
+      {rating_badge()}
     </div>
     <figure class="svc-photo">{img(photo, alt, lazy=False, high=True, sizes='(max-width: 900px) 92vw, 460px')}</figure>
   </div>
@@ -870,7 +893,7 @@ def service_page(d):
 
 <section class="band band--white">
   <div class="wrap">
-    <div class="section-head"><span class="eyebrow">Reviews</span><h2>What customers say.</h2></div>
+    <div class="section-head section-head--split"><div style="display:grid;gap:14px"><span class="eyebrow">Reviews</span><h2>What customers say.</h2></div><a class="text-link" href="{GOOGLE_URL}" target="_blank" rel="noopener">Read all {GOOGLE_COUNT} Google reviews {ICON['arrow']}</a></div>
     {review_row(d['reviews'])}
   </div>
 </section>
@@ -1074,6 +1097,7 @@ def llms():
 Castleford, Pontefract, Methley, Rothwell, Garforth, Kippax, Whitkirk, Roundhay, Leeds and the wider West Yorkshire area. Has travelled to Harrogate for bathroom projects. Details: {SITE}areas.html
 
 ## Customer reviews
+Rated {GOOGLE_RATING} out of 5 from {GOOGLE_COUNT} Google reviews.
 {rv}
 
 ## Frequently asked questions

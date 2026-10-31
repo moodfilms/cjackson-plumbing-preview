@@ -683,6 +683,26 @@ p { margin: 0; }
   .footer-grid { grid-template-columns: minmax(0, 1fr); }
 }
 
+/* ---------- Google rating ---------- */
+.rating-badge { justify-self: start; display: inline-flex; align-items: center; gap: 10px; text-decoration: none; color: var(--ink);
+  background: var(--white); border: 1px solid var(--line); border-radius: 999px; padding: 7px 16px 7px 7px; transition: border-color .15s ease, box-shadow .15s ease; max-width: 100%; }
+.rating-badge:hover { border-color: var(--ink); box-shadow: var(--shadow); }
+.rating-g { width: 28px; height: 28px; flex: none; border-radius: 50%; background: var(--ink); color: var(--white); display: grid; place-items: center; font: 800 .9rem/1 var(--display); }
+.rating-stars { position: relative; display: inline-flex; flex: none; }
+.rating-stars > span { display: inline-flex; gap: 1px; }
+.rating-stars svg { width: 16px; height: 16px; flex: none; }
+.rating-off { color: var(--grout); }
+.rating-on { position: absolute; inset: 0; color: #e8a40c; overflow: hidden; width: var(--pct); }
+.rating-text { font-size: .92rem; white-space: nowrap; }
+.rating-text b { font-family: var(--display); font-weight: 800; }
+.svc-head .rating-badge { background: var(--white); }
+.review-src { display: block; margin-top: 4px; font-weight: 600; color: var(--muted); letter-spacing: .08em; }
+.review-feature .review-src { color: var(--on-ink-muted); }
+.section-head .text-link { justify-self: start; margin-top: 2px; }
+@media (max-width: 640px) {
+  .rating-badge { order: 1; }
+  .rating-text { font-size: .86rem; }
+}
 @media (prefers-reduced-motion: reduce) {
   *, *::before, *::after { animation: none !important; transition: none !important; scroll-behavior: auto !important; }
 }

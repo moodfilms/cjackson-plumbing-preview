@@ -154,6 +154,8 @@ p { margin: 0; }
 .hero-copy h1 em { font-style: normal; background: linear-gradient(transparent 62%, var(--brass) 62%, var(--brass) 90%, transparent 90%); padding-inline: 2px; }
 .hero-lead { font-size: var(--fs-lead); color: var(--muted); max-width: 36rem; }
 .hero-actions { display: flex; flex-wrap: wrap; gap: 12px; }
+.hero-reassure { color: var(--muted); font-size: .95rem; margin-top: -8px; display: flex; gap: 10px; align-items: baseline; }
+.hero-reassure::before { content: "\2713"; color: var(--ink); font-weight: 700; flex: none; }
 .hero-quote { margin: 0; display: grid; grid-template-columns: auto minmax(0,1fr); gap: 14px; align-items: start; padding-top: 22px; border-top: 1px solid var(--line); max-width: 34rem; }
 .hero-quote svg { width: 26px; height: 26px; color: var(--brass); margin-top: 2px; }
 .hero-quote p { font-size: 1rem; }
@@ -189,6 +191,9 @@ p { margin: 0; }
 .services { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 16px; }
 .service { background: var(--white); border: 1px solid var(--line); border-radius: var(--radius); padding: 28px; display: grid; gap: 12px; align-content: start; min-width: 0; }
 .service p { color: var(--muted); }
+.service-link { margin-top: auto; padding-top: 8px; font-size: .95rem; }
+.service { grid-template-rows: auto auto 1fr auto; }
+.service--feature, .service--photo { grid-template-rows: none; }
 .service ul { list-style: none; margin: 4px 0 0; padding: 0; display: grid; gap: 8px; font-size: .97rem; }
 .service li { display: flex; gap: 10px; align-items: baseline; }
 .service li::before { content: ""; width: 6px; height: 6px; flex: none; background: var(--brass); border-radius: 1px; transform: translateY(-2px); }
@@ -230,6 +235,8 @@ p { margin: 0; }
 .viewer-notes p { color: var(--on-ink-muted); }
 .viewer-notes .meta { font-family: var(--mono); font-size: var(--fs-label); letter-spacing: .1em; text-transform: uppercase; color: var(--brass); }
 .viewer-notes blockquote { margin: 4px 0 0; padding-left: 16px; border-left: 2px solid var(--brass); color: var(--on-ink); font-size: .98rem; }
+.viewer-cta { color: var(--white); margin-top: 6px; }
+.viewer-cta:hover { color: var(--brass); }
 .viewer-notes blockquote cite { display: block; margin-top: 6px; font-style: normal; font-family: var(--mono); font-size: .7rem; letter-spacing: .1em; text-transform: uppercase; color: var(--on-ink-muted); }
 .viewer-foot { margin-top: clamp(32px, 4vw, 48px); padding-top: 24px; border-top: 1px solid rgba(255,255,255,.12); display: flex; flex-wrap: wrap; gap: 16px 32px; align-items: center; justify-content: space-between; }
 .viewer-foot p { color: var(--on-ink-muted); }
@@ -364,7 +371,9 @@ p { margin: 0; }
 .lb-close svg { width: 22px; height: 22px; }
 
 .cta-band .wrap { display: flex; flex-wrap: wrap; gap: 24px 40px; align-items: center; justify-content: space-between; }
-.cta-band h2 { max-width: 34rem; }
+.cta-band h2 { max-width: 30rem; }
+.cta-band .cta-sub { color: var(--on-ink-muted); margin-top: 12px; max-width: 32rem; font-size: var(--fs-lead); }
+.cta-band.band { padding-block: clamp(48px, 6vw, 72px); }
 .cta-band .hero-actions { flex: none; }
 
 /* Responsive */
@@ -418,7 +427,8 @@ p { margin: 0; }
   .hero .wrap { gap: 18px; }
   .hero-copy { display: contents; }
   .hero-copy .eyebrow { order: 0; }
-  .hero-copy h1, .hero-lead, .hero-actions { order: 1; }
+  .hero-copy h1, .hero-lead, .hero-actions, .hero-reassure { order: 1; }
+  .hero-reassure { margin-top: -4px; font-size: .9rem; }
   .hero-wall { order: 2; max-width: none; padding: 12px; margin-top: 6px; }
   .hero-quote { order: 3; padding-top: 18px; }
   .hero-lead { font-size: 1.02rem; }
@@ -449,7 +459,9 @@ p { margin: 0; }
   .service--photo { grid-template-rows: auto auto; }
   .service--photo .service-body { padding: 18px 20px 22px; }
   .service:not(.service--feature):not(.service--photo) { grid-template-columns: auto minmax(0, 1fr); column-gap: 16px; row-gap: 4px; padding: 20px; }
+  .service:not(.service--feature):not(.service--photo) { grid-template-rows: auto auto auto; }
   .service:not(.service--feature):not(.service--photo) .service-icon { grid-row: span 3; }
+  .service-link { margin-top: 2px; }
   .service h3 { font-size: 1.08rem; }
   .service p { font-size: .97rem; }
   .service--urgent .urgent-number { font-size: 1.45rem; margin-top: 4px; }

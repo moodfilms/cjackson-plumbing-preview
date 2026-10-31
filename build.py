@@ -749,6 +749,24 @@ def project_cards(ids):
       </a>''')
     return '<div class="project-cards">' + ''.join(cards) + '\n    </div>'
 
+def feature_project(pid):
+    p = P[pid]
+    meta = p['kind'] + (f' &middot; {E(p["place"])}' if p['place'] else '')
+    st = ''.join(f'<li class="stage stage--{k}"><figure style="margin:0">{img(n, a, sizes=("(max-width: 640px) 92vw, 460px" if k == "after" else "(max-width: 640px) 46vw, 300px"))}<figcaption class="stage-label"><i></i>{STAGE_NAME[k]}</figcaption></figure></li>' for k, n, a in p['stages'])
+    q = ''
+    if p.get('quote'):
+        r = RV[p['quote']]
+        q = f'<blockquote>{E(r["text"].split(". ")[0])}.<cite>{E(r["name"])}{", " + E(r["place"]) if r["place"] else ""}</cite></blockquote>'
+    return f'''<div class="feature-project">
+      <ol class="stages">{st}</ol>
+      <div class="feature-notes">
+        <span class="meta">{meta}</span>
+        <h3>{E(p['title'])}</h3>
+        <p>{E(p['desc'])}</p>{q}
+        <a class="text-link" href="work.html#{pid}">See every photo {ICON['arrow']}</a>
+      </div>
+    </div>'''
+
 def review_row(ids):
     return '<div class="review-row">' + ''.join(f'\n      <figure class="review"><blockquote style="margin:0"><p>{E(RV[r]["text"])}</p></blockquote><footer>{review_footer(RV[r])}</footer></figure>' for r in ids) + '\n    </div>'
 
@@ -770,7 +788,7 @@ SERVICES = [
             'Before any work is booked, Craig visits, measures up and gives you a written price.'],
       included=['Full strip-out and removal of the old suite', 'New pipework and first-fix plumbing', 'Electricians, plasterers and tilers organised for you',
                 'Baths, showers, basins, WCs and vanity units', 'Walk-in showers, wet rooms and built-in baths', 'Underfloor heating, towel radiators and LED mirrors'],
-      projects=['colin-michelle', 'joanne', 'dan', 'diane', 'barbara', 'crashley'], projects_h2='Bathrooms we&rsquo;ve fitted.',
+      featured='joanne', projects=['colin-michelle', 'dan', 'diane'], projects_h2='Bathrooms we&rsquo;ve fitted.',
       reviews=['steve', 'richard', 'joanne'], faq=['cost', 'duration', 'trades', 'wetroom', 'areas', 'insured'],
       cta=('Ready to plan your new bathroom?', 'Tell us about the room and Craig will arrange a home visit at a time that suits you.')),
  dict(path='kitchen-fitters-castleford.html', key='kitchens', crumb='Kitchen fitting', stype='Kitchen installation',
@@ -785,7 +803,7 @@ SERVICES = [
             'Every kitchen starts with a home visit and a written price before anything is booked.'],
       included=['Strip-out of the old kitchen', 'Walls re-boarded and made good where needed', 'Units, worktops and splashbacks fitted',
                 'Sinks, taps, dishwashers and washing machines plumbed in', 'Lighting and electrics organised with our electrician', 'Shower rooms and utility plumbing in the same job'],
-      projects=['kaye'], projects_h2='A kitchen we&rsquo;ve fitted.',
+      featured='kaye', projects=[], projects_h2='A kitchen we&rsquo;ve fitted, start to finish.',
       reviews=['meg', 'jilly', 'jason'], faq=['kcost', 'kitchens', 'trades', 'areas', 'insured'],
       cta=('Planning a new kitchen?', 'Tell us about the room and Craig will arrange a home visit at a time that suits you.')),
  dict(path='plumbing-heating-castleford.html', key='plumbing', crumb='Plumbing & heating', stype='Plumbing and heating repairs',
@@ -800,7 +818,7 @@ SERVICES = [
             'If water is escaping right now, don’t wait for a reply to a form. Call the mobile on 07872 584 324, day or night.'],
       included=['Replacement taps and mixers', 'Leaking pipes and joints', 'Toilet and cistern repairs and replacements',
                 'Shower repairs and replacements', 'Radiators, towel rails and underfloor heating', 'Boiler, radiator and heating repairs'],
-      projects=['tina', 'dan'], projects_h2='Recent work.',
+      featured=None, projects=['tina', 'dan', 'crashley'], projects_h2='Recent work.',
       reviews=['paul', 'jonathan', 'meg'], faq=['small', 'heating', 'emergency', 'areas', 'insured', 'experience'],
       cta=('Need a plumber in Castleford?', 'Call the office, or send a few details and we’ll get back to you.')),
 ]
@@ -845,7 +863,8 @@ def service_page(d):
       <div style="display:grid;gap:14px"><span class="eyebrow">Our work</span><h2>{d['projects_h2']}</h2></div>
       <a class="text-link" href="work.html">See all projects {ICON['arrow']}</a>
     </div>
-    {project_cards(d['projects'])}
+    {feature_project(d['featured']) if d.get('featured') else ''}
+    {project_cards(d['projects']) if d['projects'] else ''}
   </div>
 </section>
 

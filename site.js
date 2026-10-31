@@ -30,7 +30,13 @@
       });
     };
     tabs.forEach(function (tab, i) {
-      tab.addEventListener('click', function () { select(tab); });
+      tab.addEventListener('click', function () {
+        select(tab);
+        // On phones the tab row scrolls sideways: bring the chosen tab fully into view.
+        if (tablist.scrollWidth > tablist.clientWidth) {
+          tablist.scrollTo({ left: Math.max(0, tab.offsetLeft - 20), behavior: 'smooth' });
+        }
+      });
       tab.addEventListener('keydown', function (e) {
         var j = null;
         if (e.key === 'ArrowRight') j = (i + 1) % tabs.length;

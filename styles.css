@@ -261,6 +261,9 @@ p { margin: 0; }
 .review footer { color: var(--muted); }
 .review footer b { color: var(--ink); font-weight: 700; }
 
+.swipe-hint { display: none; align-items: center; gap: 6px; font-family: var(--display); font-weight: 700; font-size: .7rem; letter-spacing: .12em; text-transform: uppercase; color: var(--muted); margin: 4px 0 -4px; }
+.swipe-hint span { color: var(--ink); }
+
 /* Areas */
 .areas { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: clamp(28px, 5vw, 72px); align-items: center; }
 .map-card { background: var(--white); border: 1px solid var(--line); border-radius: var(--radius); padding: 12px; min-width: 0; }
@@ -395,40 +398,144 @@ p { margin: 0; }
   .section-head--split { grid-template-columns: minmax(0, 1fr); }
 }
 @media (max-width: 640px) {
-  body { padding-bottom: calc(72px + env(safe-area-inset-bottom, 0px)); }
+  /* Phone layout: one column, content ordered by what a homeowner needs next,
+     long lists turned into swipeable rows, and nothing that needs a sideways swipe to understand. */
+  :root { --band: 56px; --fs-hero: 2.15rem; --fs-h2: 1.7rem; }
+  html { scroll-padding-top: 84px; }
+  body { padding-bottom: calc(76px + env(safe-area-inset-bottom, 0px)); }
   .hide-sm { display: none !important; }
-  .topbar .wrap { flex-wrap: nowrap; }
+  .section-head { margin-bottom: 28px; gap: 10px; }
+  .section-head p { font-size: 1.02rem; }
+
+  /* Top bar + header */
+  .topbar .wrap { flex-wrap: nowrap; min-height: 36px; }
   .topbar strong { margin-right: 4px; }
-  .site-header .wrap { min-height: 72px; padding-block: 10px; }
-  .logo img { height: 48px; }
-  .hero-actions .btn { flex: 1 1 100%; }
-  .trust ul { grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); }
-  .trust li, .trust li:first-child, .trust li:nth-child(4) { padding: 18px 12px 18px 0; border-left: 0; border-top: 1px solid var(--line); grid-template-columns: minmax(0,1fr); }
-  .trust li:nth-child(-n+2) { border-top: 0; }
+  .site-header .wrap { min-height: 68px; padding-block: 10px; }
+  .logo img { height: 44px; }
+
+  /* Hero: headline, actions, then straight to the photo. The quote follows the photo. */
+  .hero { padding-block: 28px 40px; }
+  .hero .wrap { gap: 18px; }
+  .hero-copy { display: contents; }
+  .hero-copy .eyebrow { order: 0; }
+  .hero-copy h1, .hero-lead, .hero-actions { order: 1; }
+  .hero-wall { order: 2; max-width: none; padding: 12px; margin-top: 6px; }
+  .hero-quote { order: 3; padding-top: 18px; }
+  .hero-lead { font-size: 1.02rem; }
+  .hero-actions { gap: 10px; }
+  .hero-actions .btn { flex: 1 1 100%; min-height: 52px; }
+  .hero-photo { padding: 7px; max-width: none; }
+  .hero-photo img { aspect-ratio: 4 / 4.4; }
+  .hero-photo figcaption { padding: 9px 2px 1px; font-size: .64rem; }
+  .hero-photo figcaption span:last-child { display: none; }
+  .hero-before { left: 26px; top: 26px; bottom: auto; padding: 6px 12px 6px 6px; gap: 10px; }
+  .hero-before img { width: 44px; height: 44px; }
+  .hero-before span { font-size: .8rem; }
+
+  /* Trust strip: compact 2-up checklist, titles only */
+  .trust ul { grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); padding-block: 6px; }
+  .trust li, .trust li:first-child, .trust li:nth-child(4) { grid-template-columns: auto minmax(0, 1fr); align-items: center; gap: 10px; padding: 12px 8px 12px 0; border: 0; }
   .trust li:last-child { grid-column: 1 / -1; }
-  .trust svg { grid-row: auto; }
-  .services { grid-template-columns: minmax(0, 1fr); }
+  .trust svg { grid-row: auto; width: 22px; height: 22px; margin: 0; }
+  .trust strong { font-size: .9rem; }
+  .trust span { display: none; }
+
+  /* Services: picture first on photo cards, icon-beside-text on the small ones */
+  .services { grid-template-columns: minmax(0, 1fr); gap: 12px; }
   .service--feature { grid-template-columns: minmax(0, 1fr); }
-  .service--feature img, .service--photo img { min-height: 0; aspect-ratio: 4 / 3; height: auto; }
+  .service--feature img { order: -1; }
+  .service--feature img, .service--photo img { min-height: 0; aspect-ratio: 16 / 10; height: auto; }
+  .service--feature .service-body { padding: 22px 20px 24px; }
   .service--photo { grid-template-rows: auto auto; }
-  .stages { display: flex; overflow-x: auto; scroll-snap-type: x mandatory; gap: 10px; scroll-padding-inline: var(--gutter); margin-inline: calc(-1 * var(--gutter)); padding-inline: var(--gutter); scrollbar-width: none; }
-  .stages::-webkit-scrollbar { display: none; }
-  .stage { flex: 0 0 74%; scroll-snap-align: start; }
-  .steps { grid-template-columns: minmax(0, 1fr); gap: 28px; }
-  .step { padding-right: 0; }
+  .service--photo .service-body { padding: 18px 20px 22px; }
+  .service:not(.service--feature):not(.service--photo) { grid-template-columns: auto minmax(0, 1fr); column-gap: 16px; row-gap: 4px; padding: 20px; }
+  .service:not(.service--feature):not(.service--photo) .service-icon { grid-row: span 3; }
+  .service h3 { font-size: 1.08rem; }
+  .service p { font-size: .97rem; }
+  .service--urgent .urgent-number { font-size: 1.45rem; margin-top: 4px; }
+
+  /* Project viewer: one swipeable row of tabs; Before + During side by side, Finished full width */
+  .viewer-tabs { flex-wrap: nowrap; overflow-x: auto; margin-inline: calc(-1 * var(--gutter)); padding: 2px var(--gutter) 4px; scroll-padding-inline: var(--gutter); scrollbar-width: none; margin-bottom: 18px;
+    -webkit-mask-image: linear-gradient(90deg, #000 calc(100% - 40px), transparent); mask-image: linear-gradient(90deg, #000 calc(100% - 40px), transparent); }
+  .viewer-tabs::-webkit-scrollbar { display: none; }
+  .viewer-tab { flex: none; min-height: 44px; padding-inline: 16px; }
+  .viewer-panel { gap: 20px; }
+  .stages { grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: 10px; align-items: start; }
+  .stages .stage--after, .gallery .is-wide { grid-column: 1 / -1; }
+  .stages .stage--after img, .gallery .is-wide img { aspect-ratio: 5 / 4; }
+  .stage-label { margin-top: 7px; }
+  .viewer-notes { gap: 12px; }
+  .viewer-notes h3 { font-size: 1.35rem; }
+  .viewer-foot { margin-top: 28px; }
+  .viewer-foot .btn { width: 100%; }
+
+  /* Process: vertical timeline */
+  .steps { grid-template-columns: minmax(0, 1fr); gap: 0; }
+  .step { grid-template-columns: 44px minmax(0, 1fr); column-gap: 16px; row-gap: 4px; padding: 0 0 26px; }
+  .step-num { grid-row: span 2; margin: 0; align-self: start; }
   .step-num::after { display: none; }
-  .form-grid { grid-template-columns: minmax(0, 1fr); }
-  .contact-lines li { grid-template-columns: minmax(0, 1fr); gap: 4px; }
+  .step h3 { padding-top: 10px; }
+  .step::before { content: ""; position: absolute; left: 21px; top: 48px; bottom: 4px; width: 2px; background: repeating-linear-gradient(180deg, var(--grout) 0 6px, transparent 6px 11px); }
+  .step:last-child { padding-bottom: 0; }
+  .step:last-child::before { display: none; }
+  .process-note { margin-top: 28px; padding: 18px; }
+
+  /* Reviews: featured quote, then a swipeable row */
+  .reviews { gap: 18px; }
+  .review-feature { padding: 24px 22px; gap: 14px; }
+  .review-feature p { font-size: 1.06rem; }
+  .review-feature svg { width: 28px; height: 28px; }
+  .swipe-hint { display: flex; }
+  .review-grid { columns: auto; display: flex; gap: 12px; overflow-x: auto; scroll-snap-type: x mandatory; margin-inline: calc(-1 * var(--gutter)); padding: 0 var(--gutter) 6px; scroll-padding-inline: var(--gutter); scrollbar-width: none; }
+  .review-grid::-webkit-scrollbar { display: none; }
+  .review { flex: 0 0 84%; margin: 0; scroll-snap-align: start; align-content: space-between; }
+
+  /* Areas: say it first, then show the map */
+  .areas-copy { order: -1; gap: 18px; }
+  .areas-copy > p { font-size: 1.02rem; }
+  .chips li { padding: 6px 12px; font-size: .9rem; }
+  /* The map scales down to ~63% on phones: enlarge its labels so they render at ~12px */
+  .map-card { padding: 8px; }
+  .map-card svg text { font-size: 19px; }
+  .map-card svg text[font-size="15"] { font-size: 22px; }
+  .map-card svg text[font-size="9.5"] { font-size: 14px; }
+
+  /* Contact: intro, emergency note, the form, then the direct details */
+  .contact .wrap { gap: 22px; }
+  .contact-copy { display: contents; }
+  .contact-copy > .eyebrow, .contact-copy > h2, .contact-copy > p { order: 0; }
+  .urgent-note { order: 1; }
+  .form-card { order: 2; padding: 22px 18px; }
+  .contact-lines { order: 3; }
+  .contact-lines li { grid-template-columns: 76px minmax(0, 1fr); gap: 12px; padding: 12px 0; }
+  .contact-lines a, .contact-lines address { font-size: 1.02rem; }
+  .form-grid { grid-template-columns: minmax(0, 1fr); gap: 14px; }
+  .form-actions .btn { width: 100%; }
+  .form-actions p { text-align: center; }
+
+  /* Work page */
+  .page-head { padding-block: 32px 28px; }
+  .jump { flex-wrap: nowrap; overflow-x: auto; margin-inline: calc(-1 * var(--gutter)); padding: 2px var(--gutter) 4px; scrollbar-width: none;
+    -webkit-mask-image: linear-gradient(90deg, #000 calc(100% - 40px), transparent); mask-image: linear-gradient(90deg, #000 calc(100% - 40px), transparent); }
+  .jump::-webkit-scrollbar { display: none; }
+  .jump a { flex: none; min-height: 40px; display: inline-flex; align-items: center; }
+  .project { padding-block: 40px; }
+  .project .wrap { gap: 20px; }
   .gallery { grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: 8px; }
-  .footer-grid { grid-template-columns: minmax(0, 1fr); }
+  .cta-band .hero-actions { width: 100%; }
+  .cta-band .btn { flex: 1 1 100%; }
+
+  /* Footer + sticky call bar */
+  .site-footer { padding-block: 44px 28px; }
+  .footer-grid { grid-template-columns: minmax(0, 1fr); gap: 28px; }
   .callbar {
     display: grid; grid-template-columns: 1fr 1fr; gap: 8px;
     position: fixed; left: 0; right: 0; bottom: 0; z-index: 60;
-    background: var(--white); border-top: 1px solid var(--line);
+    background: rgba(255,255,255,.97); backdrop-filter: blur(8px); border-top: 1px solid var(--line);
     padding: 10px max(12px, env(safe-area-inset-right, 0px)) calc(10px + env(safe-area-inset-bottom, 0px)) max(12px, env(safe-area-inset-left, 0px));
     box-shadow: 0 -10px 30px -18px rgba(18,20,24,.4);
   }
-  .callbar .btn { min-height: 50px; padding-inline: 10px; }
+  .callbar .btn { min-height: 52px; padding-inline: 10px; }
 }
 @media (prefers-reduced-motion: reduce) {
   *, *::before, *::after { animation: none !important; transition: none !important; scroll-behavior: auto !important; }

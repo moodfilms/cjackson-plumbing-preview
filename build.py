@@ -66,8 +66,8 @@ RV = {r['id']: r for r in REVIEWS}
 PROJECTS = [
  dict(id='joanne', title="Joanne's bathroom", kind='Bathroom', place='Castleford',
       desc="A dated corner bath, coloured suite and carpet taken out. A new bath was built in on a timber frame with a mosaic panel and niche, alongside a quadrant shower and large-format grey tiles.",
-      stages=[('before','joanne-before','Original bathroom with a green corner bath, matching basin and patterned carpet'),('during','joanne-during','New timber frame built for the bath and boxing, walls boarded'),('after','joanne-after','Finished bathroom with built-in bath, mosaic panel and grey tiles')],
-      extras=[('joanne-1','Wall-hung basin with chrome mixer and heated towel rail'),('joanne-2','Built-in bath with mosaic-tiled niche')], quote='joanne'),
+      stages=[('before','joanne-before','Original bathroom with a green corner bath, matching basin and patterned carpet'),('during','joanne-during','New timber frame built for the bath and boxing, walls boarded'),('after','joanne-2','Finished bathroom with a white built-in bath, mosaic-tiled panel and recessed niche')],
+      extras=[('joanne-1','Wall-hung basin with chrome mixer and heated towel rail')], quote='joanne'),
  dict(id='dan', title="Dan's bathroom", kind='Bathroom', place='',
       desc="Old tiles stripped and the walls made good, then finished in grey large-format tiles with an L-shaped shower bath and glass screen, a back-lit mirror and a vanity unit.",
       stages=[('before','dan-before','Bathroom stripped back to bare walls with old adhesive showing'),('during','dan-during','Walls freshly plastered and ready for tiling'),('after','dan-after','Finished bathroom with back-lit mirror, vanity unit and shower bath')],
@@ -102,7 +102,7 @@ PROJECTS = [
       stages=[('after','tina-after','En-suite vanity unit under a back-lit mirror')],
       extras=[('tina-1','Shower enclosure and towel rail'),('tina-2','Chrome towel rail on light grey tiles')]),
 ]
-HOME_TABS = ['joanne', 'dan', 'diane', 'kaye', 'barbara', 'crashley']
+HOME_TABS = ['dan', 'diane', 'kaye', 'barbara', 'crashley', 'joanne']
 P = {p['id']: p for p in PROJECTS}
 STAGE_NAME = {'before': 'Before', 'during': 'During', 'after': 'Finished'}
 
